@@ -4,11 +4,10 @@ import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
-import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import { JaegerPropagator } from '@opentelemetry/propagator-jaeger';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
-import { trace }from '@opentelemetry/api';
+import { trace, context }from '@opentelemetry/api';
 
 const tracerInit = (serviceName: string) => {
 
@@ -23,11 +22,31 @@ const tracerInit = (serviceName: string) => {
     provider.register({ propagator: new JaegerPropagator() });
     registerInstrumentations({
         instrumentations: [
-            // new ExpressInstrumentation(),
             new HttpInstrumentation({
                 requestHook: (span, request) => {
-                    span.setAttribute("custom request hook attribute", "request");
+                    // convert request to json format
+                    const reqString = JSON.stringify(request);
+                    const reqJson = JSON.parse(reqString);
+
+                    // console.log('span', span)
+                    // span.attributes.get('myAttribute')
+
+                    span.updateName('rrrrr')
                 },
+                // responseHook: (span, response) => {
+                //     // convert request to json format
+                //     const reqString = JSON.stringify(span);
+                //     const reqJson = JSON.parse(reqString);
+
+                //     console.log('spanspan',  reqJson['http.url'])
+                //     // console.log('response', reqString)
+                //     // span.updateName('3333')
+                //     context.
+
+                //     // span.updateName(`${reqJson.method} ${reqJson.path}`)
+                // },
+                
+                // serverName: "eieiei"
             }),
             new PgInstrumentation(),
         ],

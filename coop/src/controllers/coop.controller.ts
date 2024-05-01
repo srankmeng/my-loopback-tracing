@@ -82,7 +82,7 @@ export class CoopController {
     return this.coopRepository.find(filter);
   }
 
-  @get('/coops-with-users')
+  @get('/coops-with-officers')
   @response(200, {
     description: 'Array of Coop model instances',
     content: {
