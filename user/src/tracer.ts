@@ -8,6 +8,7 @@ import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import { JaegerPropagator } from '@opentelemetry/propagator-jaeger';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { trace, context }from '@opentelemetry/api';
+require('dotenv').config()
 
 const tracerInit = (serviceName: string) => {
 
@@ -16,7 +17,7 @@ const tracerInit = (serviceName: string) => {
             [SemanticResourceAttributes.SERVICE_NAME]: serviceName
         }),
     });
-    const traceExporter = new JaegerExporter({ endpoint: 'http://localhost:14268/api/traces'});
+    const traceExporter = new JaegerExporter({ endpoint: `${process.env.TRACING_URL}/api/traces`});
 
     provider.addSpanProcessor(new SimpleSpanProcessor(traceExporter));
     provider.register({ propagator: new JaegerPropagator() });

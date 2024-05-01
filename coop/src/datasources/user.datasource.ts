@@ -1,5 +1,6 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
+require('dotenv').config();
 
 const config = {
   name: 'user',
@@ -14,7 +15,7 @@ const config = {
     {
       template: {
         method: 'GET',
-        url: 'http://localhost:3000/officers',
+        url: `${process.env.USER_API_URL}/officers`,
       },
       functions: {
         getOfficer: [],

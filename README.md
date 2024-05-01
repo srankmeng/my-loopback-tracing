@@ -4,7 +4,6 @@ npm install \
   @opentelemetry/api \
   @opentelemetry/exporter-jaeger \
   @opentelemetry/instrumentation \
-  @opentelemetry/instrumentation-express \
   @opentelemetry/instrumentation-http \
   @opentelemetry/instrumentation-pg \
   @opentelemetry/propagator-jaeger \
@@ -16,7 +15,23 @@ npm install \
 ```
 
 ### Create tracer
+create `tracer.ts`
 
 ### Create middleware
+create `middleware/trace.middleware.ts`
 
-### update application.ts
+### Update application.ts
+```
+import {traceMiddleware} from './middleware/trace.middleware';   <========= Add this line
+
+
+export class UserApplication extends BootMixin(
+  ServiceMixin(RepositoryMixin(RestApplication)),
+) {
+  constructor(options: ApplicationConfig = {}) {
+    super(options);
+
+    ...
+
+    this.middleware(traceMiddleware);  <========= Add this line
+```
