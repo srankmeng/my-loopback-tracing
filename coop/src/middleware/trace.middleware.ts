@@ -1,14 +1,16 @@
 import { Next } from '@loopback/core'
 import { Middleware, MiddlewareContext } from '@loopback/rest'
 import tracerInit from '../tracer';
+import { trace, SpanStatusCode }from '@opentelemetry/api';
 
-const tracer = tracerInit('coop');
+export const tracer = tracerInit('coop');
 
 export const traceMiddleware: Middleware = async (
   middlewareCtx: MiddlewareContext,
   next: Next,
 ) => {
   const {request} = middlewareCtx
+  trace.getActiveSpan()?.updateName(`${request.method} ${request.originalUrl}`)
   // const span = tracer.startSpan(`handler:${request.method} ${request.originalUrl}`);
     // tracer.startActiveSpan('middleware', async (span) => {
     //     //add event with custom information to span
@@ -31,10 +33,6 @@ export const traceMiddleware: Middleware = async (
 
     return result
   } catch (err) {
-    // span.setStatus({ code: 2 });  //   UNSET = 0, OK = 1, ERROR = 2
-    // span.recordException(err);
     throw err
-  } finally {
-    // span.end();
   }
 }

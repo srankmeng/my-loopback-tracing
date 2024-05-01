@@ -28,25 +28,8 @@ const tracerInit = (serviceName: string) => {
                     const reqString = JSON.stringify(request);
                     const reqJson = JSON.parse(reqString);
 
-                    // console.log('span', span)
-                    // span.attributes.get('myAttribute')
-
-                    span.updateName('rrrrr')
+                    span.updateName(`${reqJson.method} ${reqJson.path}`)
                 },
-                // responseHook: (span, response) => {
-                //     // convert request to json format
-                //     const reqString = JSON.stringify(span);
-                //     const reqJson = JSON.parse(reqString);
-
-                //     console.log('spanspan',  reqJson['http.url'])
-                //     // console.log('response', reqString)
-                //     // span.updateName('3333')
-                //     context.
-
-                //     // span.updateName(`${reqJson.method} ${reqJson.path}`)
-                // },
-                
-                // serverName: "eieiei"
             }),
             new PgInstrumentation(),
         ],

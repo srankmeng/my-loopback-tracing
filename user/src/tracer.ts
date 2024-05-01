@@ -7,8 +7,7 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import { JaegerPropagator } from '@opentelemetry/propagator-jaeger';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
-import { trace }from '@opentelemetry/api';
-
+import { trace, context }from '@opentelemetry/api';
 
 const tracerInit = (serviceName: string) => {
 
@@ -28,7 +27,7 @@ const tracerInit = (serviceName: string) => {
                     // convert request to json format
                     const reqString = JSON.stringify(request);
                     const reqJson = JSON.parse(reqString);
-                    
+
                     span.updateName(`${reqJson.method} ${reqJson.path}`)
                 },
             }),

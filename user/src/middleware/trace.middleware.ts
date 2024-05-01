@@ -1,22 +1,24 @@
 import { Next } from '@loopback/core'
 import { Middleware, MiddlewareContext } from '@loopback/rest'
 import tracerInit from '../tracer';
+import { trace }from '@opentelemetry/api';
 
-const tracer = tracerInit('user');
+export const tracer = tracerInit('user');
 
 export const traceMiddleware: Middleware = async (
   middlewareCtx: MiddlewareContext,
   next: Next,
 ) => {
   const {request} = middlewareCtx
+  trace.getActiveSpan()?.updateName(`${request.method} ${request.originalUrl}`)
   // const span = tracer.startSpan(`handler:${request.method} ${request.originalUrl}`);
-  //   // tracer.startActiveSpan('middleware', async (span) => {
-  //   //     //add event with custom information to span
-  //   //     span.addEvent('starting operation', { custom_headers: JSON.stringify(request.headers) });
-  //   //     span.addEvent('operation finished!');
-  //   //     //end the span
-  //   //     span.end();
-  //   // })
+    // tracer.startActiveSpan('middleware', async (span) => {
+    //     //add event with custom information to span
+    //     span.addEvent('starting operation', { custom_headers: JSON.stringify(request.headers) });
+    //     span.addEvent('operation finished!');
+    //     //end the span
+    //     span.end();
+    // })
 
   // span.setAttribute('http.method', request.method);
   // span.setAttribute('http.url', request.url);
